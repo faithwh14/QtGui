@@ -3,18 +3,26 @@
 
 #include <QWidget>
 
+#include "IBaseView.h"
+
 namespace Ui {
 class LoginUI;
 }  // namespace Ui
 
-class LoginView : public QWidget {
+namespace faith {
+
+class LoginView : public IBaseView {
     Q_OBJECT
    public:
     LoginView(QWidget* parent = nullptr);
-    ~LoginView();
+    ~LoginView() override;
 
    private:
     Ui::LoginUI* ui;
+
+    void setupConnection() override;
 };
+
+}  // namespace faith
 
 #endif  // SRC_GUI_VIEW_LOGINVIEW_H_
