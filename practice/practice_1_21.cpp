@@ -19,10 +19,10 @@ class IProduct {
 
 class Product: public IProduct {
     public:
-    unsigned int getPrice() {
+    const unsigned int& getPrice() {
         return m_price;
     }
-    unsigned int getQuantity() {
+    const unsigned int& getQuantity() {
         return m_quantity;
     }
 };
