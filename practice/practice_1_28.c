@@ -63,7 +63,9 @@ void addTask(void(*task)(void), uint8_t priority) {
     }
 }
 
-void contextSwitch() {
+int contextSwitch() {
+    int retval = 0;
+    
     uint8_t highest_priority = IDLE_PRIORITY;
     int task_index = -1;
     
@@ -78,7 +80,16 @@ void contextSwitch() {
     
     if (task_index != -1) {
         TaskList[task_index].task();
+        
+        free(TaskList[task_index].sp);
+        TaskList[task_index].sp = NULL;
+        TaskList[task_index].task = NULL;
+        TaskList[task_index].priority = IDLE_PRIORITY;
+    } else {
+        retval = -1;   
     }
+    
+    return retval;
 }
 
 int main()
@@ -91,7 +102,9 @@ int main()
     
     while (1) {
         // printf("Hello World");
-        contextSwitch();
+        if (contextSwitch() == -1) {
+            break;
+        }
     }
     
 
