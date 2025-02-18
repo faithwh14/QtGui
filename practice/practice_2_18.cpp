@@ -46,7 +46,7 @@ class Shopping {
     }
     virtual ~Shopping() {}
     
-    int getDimension() {
+    int getDimension() const {
         return m_length * m_width * m_height;
     }
     
@@ -111,40 +111,32 @@ class SungeiWang: public Shopping {
 class MakeMall {
     public:
     static MakeMall* GetInstance() {
-        static MakeMall* makeMall;
-        if (makeMall == nullptr) {
-            makeMall = new MakeMall();
-        }
+        static MakeMall* makeMall = new MakeMall();
         return makeMall;
+    }
+    static void DestructInstance() {
+        delete MakeMall::GetInstance();
+    }
+
+    private:
+    MakeMall() {
+        shoppingMall = {new TRX(), new OneUtama(), new SunwayPyramid(), new Pavalion(), new MidValley(), new SungeiWang()};
     }
     ~MakeMall() {
         for (auto& mall: shoppingMall) {
             if (mall != nullptr) {
                 delete mall;
-                std::cout << "Mall is deleted" << std::endl;
             }
         }
         std::cout << "SUCCESSFULLY DEALLOCATE ALL SHOPPING MEMORY" << std::endl;
     }
-    private:
-    MakeMall() {
-        shoppingMall = {new TRX(), new OneUtama(), new SunwayPyramid(), new Pavalion(), new MidValley(), new SungeiWang()};
-    }
-    // ~MakeMall() {
-    //     for (auto& mall: shoppingMall) {
-    //         if (mall != nullptr) {
-    //             delete mall;
-    //         }
-    //     }
-    //     std::cout << "SUCCESSFULLY DEALLOCATE ALL SHOPPING MEMORY" << std::endl;
-    // }
 
     std::set<Shopping*> shoppingMall;  // default should be empty
 };
 
 int main()
 {
-    std::cout<<"Hello World" << std::endl;
+    std::cout <<"Hello World" << std::endl;
     
     // TRX trx;
     // int total_dimension = trx.getDimension();
@@ -152,8 +144,9 @@ int main()
     // std::cout << "TOTAL SIZE IN VOLUME FOR TRX MALL IS: " << total_dimension << std::endl;
     
     static MakeMall* makeMall = MakeMall::GetInstance();
+    static MakeMall* makeMall1 = MakeMall::GetInstance();
+    MakeMall::DestructInstance();
     
-    delete makeMall;
 
     return 0;
 }
